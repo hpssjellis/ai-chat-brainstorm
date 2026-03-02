@@ -1425,7 +1425,7 @@ function myGenerateHTML() {
     // ────────────────────────────────────────────────
     //  PRESENCE
     // ────────────────────────────────────────────────
-    let myCurrentUsers = []; // keep for kick lookups
+    let myCurrentUsers = [];
 
     function myRenderPresence(listId, items, isAdmin) {
       const el = document.getElementById(listId);
@@ -1434,33 +1434,32 @@ function myGenerateHTML() {
         return;
       }
       if (isAdmin) {
-        // Admin chips: read-only, no kick
-        el.innerHTML = items.map(u =>
-          '<div class="my-presence-chip admin">' + myEscape(u.name || u) + '</div>'
-        ).join('');
+        el.innerHTML = items.map(function(u) {
+          return '<div class="my-presence-chip admin">' + myEscape(u.name || u) + '</div>';
+        }).join('');
       } else {
-        // Participant chips: clickable to kick if viewing admin is an admin
-        el.innerHTML = items.map(u => {
+        el.innerHTML = items.map(function(u) {
           if (myIsAdmin) {
             const safeId = (u.id || '').replace(/"/g, '');
             const safeName = myEscape(u.name || u);
-            return '<div class="my-presence-chip kickable" data-kick-id="' + safeId + '" data-kick-name="' + safeName + '" title="Click to remove">' +
-              safeName +
-              '<span class="my-kick-x">✕</span></div>';
+            return '<div class="my-presence-chip kickable" data-kick-id="'
+              + safeId + '" data-kick-name="' + safeName
+              + '" title="Click to remove">'
+              + safeName + '<span class="my-kick-x">&#x2715;</span></div>';
           }
           return '<div class="my-presence-chip">' + myEscape(u.name || u) + '</div>';
         }).join('');
-        // Attach kick listeners via delegation on the list element
-        el.querySelectorAll('.kickable').forEach(chip => {
-          chip.addEventListener('click', () => {
+        el.querySelectorAll('.kickable').forEach(function(chip) {
+          chip.addEventListener('click', function() {
             const uid = chip.dataset.kickId;
             const uname = chip.dataset.kickName;
             if (!uid) return;
-            if (!confirm('Remove "' + uname + '" from the room?')) return;
+            if (!confirm('Remove ' + uname + ' from the room?')) return;
             mySocket.emit('myKickUser', { room: myCurrentRoom, userId: uid });
           });
         });
       }
+    }
 
     // ────────────────────────────────────────────────
     //  CHROME FLAGS HELPER
