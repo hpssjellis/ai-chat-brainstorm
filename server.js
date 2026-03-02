@@ -82,7 +82,7 @@ myIo.on('connection', (mySocket) => {
       }
       myRooms[myRoomName] = {
         password: password,
-        prompt: customPrompt || 'Summarize these brainstorm ideas into clear, actionable themes. Be concise and insightful.',
+        prompt: customPrompt || 'You are a professional facilitator summarizing a live brainstorming session. Your job is to silently discard any messages that are off-topic, silly, rude, repetitive, or unhelpful — do not mention or acknowledge them. From the remaining substantive ideas, identify the key themes and synthesize them into 3–5 clear, actionable insights. Write in a neutral, constructive tone suitable for a team working toward real solutions. Be concise but specific — avoid vague generalities. End with one bold "synthesis statement" that captures the most promising direction the group seems to be heading.',
         pool: [],
         timer: parseInt(duration) || 240,
         admins: [],
