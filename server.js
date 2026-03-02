@@ -1442,18 +1442,25 @@ function myGenerateHTML() {
         // Participant chips: clickable to kick if viewing admin is an admin
         el.innerHTML = items.map(u => {
           if (myIsAdmin) {
-badge.className = 'error'; return '<div class="my-presence-chip kickable" style="cursor:pointer; display:inline-block;" onclick="myKickUser(\'' + (u.id || '') + '\', \'' + myEscape(u.name || u).replace(/'/g, "\\'") + '\')" title="Click to remove">' + myEscape(u.name || u) + '<span style="color:red; margin-left:5px;">✕</span></div>';
+            const safeId = (u.id || '').replace(/"/g, '');
+            const safeName = myEscape(u.name || u);
+            return '<div class="my-presence-chip kickable" data-kick-id="' + safeId + '" data-kick-name="' + safeName + '" title="Click to remove">' +
+              safeName +
+              '<span class="my-kick-x">✕</span></div>';
           }
           return '<div class="my-presence-chip">' + myEscape(u.name || u) + '</div>';
         }).join('');
+        // Attach kick listeners via delegation on the list element
+        el.querySelectorAll('.kickable').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const uid = chip.dataset.kickId;
+            const uname = chip.dataset.kickName;
+            if (!uid) return;
+            if (!confirm('Remove "' + uname + '" from the room?')) return;
+            mySocket.emit('myKickUser', { room: myCurrentRoom, userId: uid });
+          });
+        });
       }
-    }
-
-    function myKickUser(userId, userName) {
-      if (!userId) return;
-      if (!confirm('Remove "' + userName + '" from the room?')) return;
-      mySocket.emit('myKickUser', { room: myCurrentRoom, userId });
-    }
 
     // ────────────────────────────────────────────────
     //  CHROME FLAGS HELPER
