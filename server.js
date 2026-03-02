@@ -1442,9 +1442,7 @@ function myGenerateHTML() {
         // Participant chips: clickable to kick if viewing admin is an admin
         el.innerHTML = items.map(u => {
           if (myIsAdmin) {
-            return '<div class="my-presence-chip kickable" onclick="myKickUser(\'' + (u.id || '') + '\',\'' + myEscape(u.name || u).replace(/'/g,"\\'") + '\')" title="Click to remove">' +
-              myEscape(u.name || u) +
-              '<span class="my-kick-x">✕</span></div>';
+badge.className = 'error'; return '<div class="my-presence-chip kickable" style="cursor:pointer; display:inline-block;" onclick="myKickUser(\'' + (u.id || '') + '\', \'' + myEscape(u.name || u).replace(/'/g, "\\'") + '\')" title="Click to remove">' + myEscape(u.name || u) + '<span style="color:red; margin-left:5px;">✕</span></div>';
           }
           return '<div class="my-presence-chip">' + myEscape(u.name || u) + '</div>';
         }).join('');
