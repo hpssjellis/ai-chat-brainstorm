@@ -1043,10 +1043,30 @@ function myGenerateHTML() {
     div.innerHTML = '<div class="my-msg-label">✓ Submitted</div>' + myEsc(msg);
     box.appendChild(div); box.scrollTop = box.scrollHeight;
   }
+
+
+
+
+async function myEsc(myUnsafeString) {
+  if (!myUnsafeString) {
+    return "";
+  }
+
+  return myUnsafeString
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+    .replace(/\n/g, "<br>");
+}
+
+/*
   function myEsc(s) {
     return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
   }
 
+*/
   // ── Presence ─────────────────────────────────────────
   function myRenderPresence(listId, items, isAdmin) {
     const el = document.getElementById(listId);
